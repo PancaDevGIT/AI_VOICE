@@ -12,7 +12,7 @@ r = sr.Recognizer()
 engine = pyttsx3.init()
 
 def speak(text):
-    engine.setProperty('rate', 100) # velocidad de habla reducida a la mitad
+    engine.setProperty('rate', 100)
     engine.say(text)
     engine.runAndWait()
 
@@ -51,7 +51,7 @@ with sr.Microphone() as source:
             speak("Mi desarrollador es PancaDev")
 
         if 'buenos días' in text.lower():
-            speak("Buenos dias, espero que hayas dormido bien. Que tengas un buen dia Antonio.")
+            speak("Buenos dias, espero que hayas dormido bien. Que tengas un buen dia.")
         
         if 'registra mi nombre' in text.lower():
             speak("Por ahora no estoy desarrollada, para agregar a nuevos usuarios a mi base de datos.")
