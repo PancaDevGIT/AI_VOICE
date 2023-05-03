@@ -1,0 +1,5 @@
+speechrecognition==3.8.1
+keyboard==0.13.5
+pyttsx3==2.90
+requests==2.26.0
+datetime==4.3
