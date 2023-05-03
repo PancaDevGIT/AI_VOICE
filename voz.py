@@ -1,4 +1,4 @@
-#PancaIA Version 0.0.1 Private
+#PancaIA Version 0.0.2 Private
 
 import speech_recognition as sr
 import keyboard
@@ -12,7 +12,7 @@ r = sr.Recognizer()
 engine = pyttsx3.init()
 
 def speak(text):
-    engine.setProperty('rate', 100)
+    engine.setProperty('rate', 150)
     engine.say(text)
     engine.runAndWait()
 
@@ -25,16 +25,14 @@ def get_weather(city):
         temp = weather_data['main'].get('temp')
         wind = weather_data['wind'].get('speed')
         rain_data = weather_data.get('rain', {}).get('1h', 0)
-        rain = "No va a llover hoy" if rain_data == 0 else "Si va a llover hoy"
+        rain = "No parece que se vayan a presentar condiciones meteorológicas que indiquen la ocurrencia de precipitaciones en el transcurso del día de hoy." if rain_data == 0 else "Las condiciones meteorológicas sugieren la probabilidad de precipitaciones en el transcurso del día de hoy."
         speak(f"En {city} hay {temp} grados, el viento está a {wind} kilómetros por hora. Comprobando si va a llover hoy... {rain}")
     else:
         speak(f"No se ha encontrado información para {city}")
 
 with sr.Microphone() as source:
-    text = ''
+    r.adjust_for_ambient_noise(source, duration=0.5)
     while True:
-        r.adjust_for_ambient_noise(source)
-        
         audio = r.listen(source)
 
         try:
@@ -44,28 +42,21 @@ with sr.Microphone() as source:
             print("No se ha podido entender el audio")
             continue
         
-        if text == '':
-            keyboard.press_and_release('enter')
-        
-        if 'quién es tu desarrollador' in text.lower():
-            speak("Mi desarrollador es PancaDev")
+        text = text.lower()
 
-        if 'buenos días' in text.lower():
+        if 'quién es tu desarrollador' in text:
+            speak("Mi desarrollador es PancaDev")
+        elif 'buenos días' in text:
             speak("Buenos dias, espero que hayas dormido bien. Que tengas un buen dia.")
-        
-        if 'registra mi nombre' in text.lower():
+        elif 'registra mi nombre' in text:
             speak("Por ahora no estoy desarrollada, para agregar a nuevos usuarios a mi base de datos.")
-        
-        if 'cierra el programa' in text.lower():
+        elif 'cierra el programa' in text:
             speak("Cerrando el programa")
             break
-        
-        if 'dime el tiempo en' in text.lower():
-            city = text.lower().replace('dime el tiempo en', '').strip()
+        elif 'dime el tiempo en' in text:
+            city = text.replace('dime el tiempo en', '').strip()
             get_weather(city)
-        
-        if 'qué hora es' in text.lower():
-
+        elif 'qué hora es' in text:
             spain = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2)))
             hora = spain.strftime("Son las %H:%M en España")
             speak(hora)
